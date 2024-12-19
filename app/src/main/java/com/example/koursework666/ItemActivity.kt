@@ -16,6 +16,7 @@ class ItemActivity : AppCompatActivity() {
     private lateinit var countTextView: TextView
     private lateinit var itemTitle: String
     private lateinit var itemDesc: String
+    private var itemId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +34,10 @@ class ItemActivity : AppCompatActivity() {
         val buttonBuy: Button = findViewById(R.id.button_buy)
 
         // Получаем данные из Intent
+        itemId = intent.getIntExtra("itemId", 0)
         itemTitle = intent.getStringExtra("itemTitle") ?: ""
         itemDesc = intent.getStringExtra("itemText") ?: ""
-        itemCount = intent.getStringExtra("itemCount")?.toInt() ?: 0
+        itemCount = intent.getIntExtra("itemCount", 0)
 
         // Устанавливаем текст на экране
         title.text = itemTitle
@@ -72,6 +74,10 @@ class ItemActivity : AppCompatActivity() {
         if (itemCount == 0) {
             countTextView.text = "Нет в наличии"
         }
+
+        // Обновление количества товара в базе данных
+        val db = DbHelper(this, null)
+        db.updateItemCount(itemId, itemCount)
 
         // Переход на страницу с купленными товарами
         val intent = Intent(this, PurchasedActivity::class.java)

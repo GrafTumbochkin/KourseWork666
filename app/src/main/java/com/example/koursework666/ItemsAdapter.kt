@@ -46,7 +46,7 @@ class ItemsAdapter(var items: List<Item>, var context: Context) : RecyclerView.A
             intent.putExtra("itemId", item.id) // Передаём itemId
             intent.putExtra("itemTitle", item.title)
             intent.putExtra("itemText", item.text)
-            intent.putExtra("itemCount", item.count.toString())
+            intent.putExtra("itemCount", item.count)
             context.startActivity(intent)
         }
     }

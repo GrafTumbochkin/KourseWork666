@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ItemsActivity : AppCompatActivity() {
 
-
     private lateinit var itemsAdapter: ItemsAdapter
     private var items = arrayListOf<Item>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,13 +24,8 @@ class ItemsActivity : AppCompatActivity() {
         }
 
         val itemsList: RecyclerView = findViewById(R.id.itemsList)
-        val items = arrayListOf<Item>()
-
-
-
-        items.add(Item(1,"divan", "Диван", "вввв", "йцуцйыв", 5, 1000))
-        items.add(Item(2,"molot", "Молот", "вфффф", "ыфссув", 4,150))
-        items.add(Item(3,"gvozdi", "Гвозди", "ыффффф", "вцйвыфсч", 100,200))
+        val db = DbHelper(this, null)
+        items = db.getAllItems() as ArrayList<Item>
 
         itemsList.layoutManager = LinearLayoutManager(this)
         itemsList.adapter = ItemsAdapter(items, this)

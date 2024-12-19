@@ -30,30 +30,31 @@ class AuthActivity : AppCompatActivity() {
         linkToReg.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-
         }
 
-        button.setOnClickListener{
-            val login =  userLogin.text.toString().trim()
-            val pass =  userPass.text.toString().trim()
+        button.setOnClickListener {
+            val login = userLogin.text.toString().trim()
+            val pass = userPass.text.toString().trim()
 
-            if(login == ""  ||pass == "" )
+            if (login.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Не все поля заполнены!", Toast.LENGTH_LONG).show()
-            else
-            {
+            } else {
                 val db = DbHelper(this, null)
-                val isAuth = db.getUser(login, pass)
-                if(isAuth) {
-
+                val (isAuth, role) = db.getUser(login, pass)
+                if (isAuth) {
                     Toast.makeText(this, "Пользователь $login авторизован", Toast.LENGTH_LONG).show()
                     userLogin.text.clear()
                     userPass.text.clear()
 
-                    val intent = Intent(this, ItemsActivity::class.java)
+                    val intent = if (role == "admin") {
+                        Intent(this, AdminActivity::class.java)
+                    } else {
+                        Intent(this, ItemsActivity::class.java)
+                    }
                     startActivity(intent)
-                }
-                else
+                } else {
                     Toast.makeText(this, "Пользователь $login НЕ авторизован", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
